@@ -1,6 +1,6 @@
 variable "project" {
   type    = string
-  default = "aws-fundamentals"
+  default = "aws-foundations"
 }
 
 variable "environment" {
