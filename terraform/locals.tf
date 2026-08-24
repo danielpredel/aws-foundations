@@ -5,4 +5,8 @@ locals {
     Project     = var.project
     Environment = var.environment
   }
+
+  bucket_name   = "${local.prefix_name}-s3-app"
+  instance_name = "${local.prefix_name}-ec2-app"
+  key_pair_name = "${local.prefix_name}-ec2"
 }
