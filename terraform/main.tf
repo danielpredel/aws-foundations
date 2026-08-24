@@ -1,4 +1,4 @@
-# Networks resources
+# Network resources
 resource "aws_vpc" "main" {
   cidr_block = "172.32.0.0/16"
 
@@ -74,4 +74,59 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic" {
   security_group_id = aws_security_group.allow_ssh_app.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1"
+}
+
+
+# IAM Resources
+data "aws_iam_policy_document" "ec2_app_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "ec2_app" {
+  name               = "${local.prefix_name}-ec2-app-role"
+  assume_role_policy = data.aws_iam_policy_document.ec2_app_assume_role_policy.json
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "${local.prefix_name}-ec2-app-role"
+    }
+  )
+}
+
+data "aws_iam_policy_document" "ec2_app_s3_policy" {
+  statement {
+    sid = "${local.prefix_name}-ec2-app-rw-s3"
+
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${local.bucket_name}/*",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "ec2_app_s3" {
+  name   = "${local.prefix_name}-ec2-s3-app-policy"
+  policy = data.aws_iam_policy_document.ec2_app_s3_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_app_s3" {
+  role       = aws_iam_role.ec2_app.name
+  policy_arn = aws_iam_policy.ec2_app_s3.arn
+}
+
+resource "aws_iam_instance_profile" "ec2_app" {
+  name = "${local.prefix_name}-ec2-app-instance-profile"
+  role = aws_iam_role.ec2_app.name
 }
