@@ -130,3 +130,17 @@ resource "aws_iam_instance_profile" "ec2_app" {
   name = "${local.prefix_name}-ec2-app-instance-profile"
   role = aws_iam_role.ec2_app.name
 }
+
+
+# S3 resources
+resource "aws_s3_bucket" "app" {
+  bucket = local.bucket_name
+  region = var.region
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = local.bucket_name
+    }
+  )
+}
