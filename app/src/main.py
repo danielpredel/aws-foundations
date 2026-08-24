@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import boto3
+from pathlib import Path
 
 app = FastAPI()
 
@@ -8,7 +9,7 @@ class HealthResponse(BaseModel):
     status: str
 
 s3 = boto3.client("s3")
-BUCKET = "project-1-s3"
+BUCKET = (Path(__file__).parent / ".bucket_name").read_text().strip()
 
 @app.get("/health", response_model=HealthResponse)
 async def health():
