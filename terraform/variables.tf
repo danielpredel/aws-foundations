@@ -17,3 +17,8 @@ variable "region_abbreviation" {
   type    = string
   default = "use1"
 }
+
+variable "key_pair_name" {
+  type    = string
+  default = "aws-foundations-dev-ec2"
+}
