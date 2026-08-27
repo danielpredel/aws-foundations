@@ -12,7 +12,7 @@ resource "aws_vpc" "main" {
 
 resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = "172.32.0.0/24"
+  cidr_block              = "172.32.0.0/20"
   availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
 
@@ -54,9 +54,13 @@ resource "aws_security_group" "allow_ssh_app" {
   )
 }
 
+data "http" "my_ip" {
+  url = "https://checkip.amazonaws.com"
+}
+
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
   security_group_id = aws_security_group.allow_ssh_app.id
-  cidr_ipv4         = "192.168.1.21/32"
+  cidr_ipv4         = "${local.my_ip}"
   from_port         = 22
   to_port           = 22
   ip_protocol       = "tcp"
@@ -103,7 +107,7 @@ resource "aws_iam_role" "ec2_app" {
 
 data "aws_iam_policy_document" "ec2_app_s3_policy" {
   statement {
-    sid = "${local.prefix_name}-ec2-app-rw-s3"
+    sid = "EC2AppS3ReadWrite"
 
     actions = [
       "s3:GetObject",
@@ -154,6 +158,11 @@ data "aws_ami" "al2023" {
   filter {
     name   = "name"
     values = ["al2023-ami-*"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
   }
 }
 
