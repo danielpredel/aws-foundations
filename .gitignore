@@ -22,9 +22,9 @@ app/.venv/
 Thumbs.db
 
 # Terraform
-terraform/.terraform/
-terraform/*.tfstate
-terraform/*.tfstate.*
-terraform/.terraform.lock.hcl
-terraform/crash.log
-terraform/crash.*.log
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/.terraform.lock.hcl
+**/crash.log
+**/crash.*.log

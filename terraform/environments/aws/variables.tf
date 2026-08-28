@@ -5,7 +5,7 @@ variable "project" {
 
 variable "environment" {
   type    = string
-  default = "dev"
+  default = "prod"
 }
 
 variable "region" {
@@ -16,9 +16,4 @@ variable "region" {
 variable "region_abbreviation" {
   type    = string
   default = "use1"
-}
-
-variable "key_pair_name" {
-  type    = string
-  default = "aws-foundations-dev-ec2"
 }
