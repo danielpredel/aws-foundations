@@ -19,7 +19,7 @@ locals {
   }
 
   ec2 = {
-    key_pair_name = var.key_pair_name
+    key_pair_name = "${var.project}-${var.environment}-ec2"
     instance_name = "${local.common.prefix_name}-ec2-app"
   }
 }
