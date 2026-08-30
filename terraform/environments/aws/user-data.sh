@@ -28,5 +28,23 @@ echo "${bucket_name}" > ./src/.bucket_name
 # Download app's dependencies
 uv sync
 
-# Start app
-uv run uvicorn src.main:app --host 0.0.0.0 --port 8000
+# Create systemd service
+cat > /etc/systemd/system/awsapp.service <<EOF
+[Unit]
+Description=AWS Foundations App
+After=network.target
+
+[Service]
+User=ec2-user
+WorkingDirectory=/home/ec2-user/app
+ExecStart=/root/.local/bin/uv run uvicorn src.main:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable awsapp
+systemctl start awsapp
