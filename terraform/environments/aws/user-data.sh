@@ -3,41 +3,42 @@ set -euxo pipefail
 
 exec > >(tee /var/log/user-data.log | logger -t user-data) 2>&1
 
-# Move to ec2-user's home
 cd /home/ec2-user
 
-# Install git
+# Install dependencies
 dnf update -y
-dnf install -y git tar --allowerasing
+dnf install -y git tar curl --allowerasing
 
 # Clone app
 git clone https://github.com/danielpredel/aws-foundations.git tmp-repo
 mv tmp-repo/app .
 rm -rf tmp-repo
 
-# Install uv
-curl -LsSf https://astral.sh/uv/install.sh | sh
-source /root/.local/bin/env
+# Install uv for ec2-user
+sudo -u ec2-user bash -c 'curl -LsSf https://astral.sh/uv/install.sh | sh'
 
-# Move into app's dir
-cd app
+# Move into app
+cd /home/ec2-user/app
 
-# Define bucket's name
+# Define bucket name
 echo "${bucket_name}" > ./src/.bucket_name
 
-# Download app's dependencies
-uv sync
+# Change owner of the app
+chown -R ec2-user:ec2-user /home/ec2-user/app
+
+# Install app dependencies as ec2-user
+sudo -u ec2-user /home/ec2-user/.local/bin/uv sync
 
 # Create systemd service
-cat > /etc/systemd/system/awsapp.service <<EOF
+cat > /etc/systemd/system/aws-foundations.service <<EOF
 [Unit]
-Description=AWS Foundations App
+Description=AWS Foundations FastAPI App
 After=network.target
 
 [Service]
 User=ec2-user
 WorkingDirectory=/home/ec2-user/app
-ExecStart=/root/.local/bin/uv run uvicorn src.main:app --host 0.0.0.0 --port 8000
+ExecStart=/home/ec2-user/.local/bin/uv run uvicorn src.main:app --host 0.0.0.0 --port 8000
 Restart=always
 RestartSec=5
 
@@ -45,6 +46,6 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
+# Enable and start service
 systemctl daemon-reload
-systemctl enable awsapp
-systemctl start awsapp
+systemctl enable --now aws-foundations.service
