@@ -131,8 +131,14 @@ Terraform is used to define the infrastructure as reproducible configuration.
 
 ```text
 terraform/
-├── environments/
-└── modules/
+├── environments
+│   ├── aws
+│   └── floci
+└── modules
+    ├── ec2
+    ├── iam
+    ├── network
+    └── s3
 ```
 
 `terraform plan`
