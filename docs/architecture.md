@@ -170,4 +170,4 @@ The infrastructure can be managed through two approaches:
 
 The same infrastructure concepts are therefore practiced both imperatively through the CLI and declaratively through Terraform.
 
-More details about the implementation are available in [`docs/infrastructure.md`](infrastructure.md).
+More details about the implementation are available in [`infrastructure.md`](infrastructure.md).
