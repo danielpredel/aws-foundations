@@ -121,7 +121,6 @@ aws ec2 run-instances \
   --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=<Instance-Name>}]' \
   --count 1
 ```
-> See [docs/cli.md]() for the complete command history.
 More details about the complete command history are available in:
 
 * [`docs/cli.md`](docs/cli.md)
