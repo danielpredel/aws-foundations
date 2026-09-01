@@ -230,10 +230,16 @@ aws-foundations/
 ├── app/
 │   └── Backend application
 │
-├── terraform/
-│   ├── environments/
-│   └── modules/
-│
+├── terraform
+│   ├── environments
+│   │   ├── aws
+│   │   └── floci
+│   └── modules
+│       ├── ec2
+│       ├── iam
+│       ├── network
+│       └── s3
+│ 
 ├── docs/
 │   ├── architecture.md
 │   ├── deployment.md
@@ -242,12 +248,12 @@ aws-foundations/
 │   ├── security.md
 │   └── decisions.md
 │
-├── images/
-│   ├── floci/
-│   ├── aws/
-│   ├── cli/
-│   ├── terraform/
-│   └── application/
+├── images
+│   ├── application
+│   ├── architecture
+│   ├── aws
+│   ├── floci
+│   └── terraform
 │
 └── README.md
 ```
