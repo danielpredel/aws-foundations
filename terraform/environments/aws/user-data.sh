@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-set -euxo pipefail
 
+# Enable strict error handling
+set -euxo pipefail
 exec > >(tee /var/log/user-data.log | logger -t user-data) 2>&1
 
+# Move to ec2-user's home
 cd /home/ec2-user
 
 # Install dependencies
