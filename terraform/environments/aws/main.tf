@@ -22,9 +22,9 @@ module "s3" {
 module "ec2" {
   source = "../../modules/ec2"
 
-  ami_owner         = var.ami_owner
-  ami_name_pattern  = var.ami_name_pattern
-  ami_architecture  = var.ami_architecture
+  ami_owner        = var.ami_owner
+  ami_name_pattern = var.ami_name_pattern
+  ami_architecture = var.ami_architecture
 
   common = local.common
   ec2    = local.ec2
