@@ -342,16 +342,12 @@ aws ec2 terminate-instances --instance-ids <InstanceId>
 
 ## Floci-specific EC2 Limitations
 
-Floci uses containers to simulate EC2 instances. As a result, the environment
-does not provide some components of a real EC2 workflow, including packages such
-as `systemd` and `cloud-init`.
-
-Additionally:
-
 * `ec2-user` does not exist.
 * SSH connections are made directly as `root`.
 * The simulated public IP is `127.0.0.1`.
 * Access to the instance requires the port assigned by Floci.
+* **Instance data is not persisted across instance restarts**, so services that depend on locally stored data may require additional initialization or provisioning after a restart.
+* **Published application ports are not automatically restored after an instance restart.** Because Floci uses `socat` sidecar containers to expose these ports, the corresponding security group ingress rule must be re-authorized to recreate the port forwarding.
 
 These differences should be considered when moving the deployment from Floci to
 real AWS.

@@ -292,6 +292,6 @@ ec2-user
 
 ### EC2 implementation
 
-Floci simulates EC2 instances using containers, so the local environment does not reproduce every behavior of a real EC2 instance.
+For the local environment, EC2 instances are backed by Docker containers through Floci. To make the guest environment closer to a real EC2 instance, this project uses a custom Ubuntu 24.04 AMD64 cloud image with **systemd** and **cloud-init** enabled.
 
-These differences should be considered when validating the application locally before deploying it to AWS.
+This allows the same instance-level workflows used in AWS—such as systemd services and cloud-init-based provisioning—to be practiced locally. The custom image is project-specific and is not required when deploying the infrastructure to AWS.

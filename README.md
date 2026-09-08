@@ -84,6 +84,16 @@ Developer
           └── VPC
 ```
 
+### Custom EC2 AMI
+
+To make the local EC2 environment behave more like a real AWS EC2 instance, a custom Ubuntu 24.04 cloud image was built for Floci with **AMD64 (`x86_64`) architecture**, **systemd**, and **cloud-init** enabled.
+
+This allows the Floci EC2 instance to use a more realistic Linux boot process and instance initialization workflow, including systemd-managed services and cloud-init-based provisioning.
+
+The resulting image is registered in Floci's AMI catalog and used by the Terraform Floci environment. The application and infrastructure configuration remain shared with the real AWS environment, while only the environment-specific AMI and configuration differ.
+
+This approach provides a substantially closer local development experience to running the application on an actual EC2 instance without requiring AWS resources during the development and testing phase.
+
 ### Floci
 
 Floci provides a local AWS-compatible environment that allows AWS APIs, SDKs, and CLI workflows to be practiced without immediately deploying resources to AWS.
