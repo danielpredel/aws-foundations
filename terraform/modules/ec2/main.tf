@@ -1,20 +1,21 @@
-data "aws_ami" "al2023" {
+data "aws_ami" "instance" {
   most_recent = true
-  owners      = ["amazon"]
+
+  owners = [var.ami_owner]
 
   filter {
     name   = "name"
-    values = ["al2023-ami-*"]
+    values = [var.ami_name_pattern]
   }
 
   filter {
     name   = "architecture"
-    values = ["x86_64"]
+    values = [var.ami_architecture]
   }
 }
 
 resource "aws_instance" "app" {
-  ami                    = data.aws_ami.al2023.id
+  ami                    = data.aws_ami.instance.id
   instance_type          = "t3.micro"
   key_name               = var.ec2.key_pair_name
   vpc_security_group_ids = [var.security_group_id]

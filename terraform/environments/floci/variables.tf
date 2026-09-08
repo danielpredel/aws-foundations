@@ -17,3 +17,18 @@ variable "region_abbreviation" {
   type    = string
   default = "use1"
 }
+
+variable "ami_owner" {
+  type    = string
+  default = "099720109477"
+}
+
+variable "ami_name_pattern" {
+  type    = string
+  default = "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"
+}
+
+variable "ami_architecture" {
+  type    = string
+  default = "x86_64"
+}

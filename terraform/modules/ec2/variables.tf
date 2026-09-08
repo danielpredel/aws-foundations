@@ -30,3 +30,15 @@ variable "instance_profile_name" {
 variable "user_data" {
   type = string
 }
+
+variable "ami_owner" {
+  type        = string
+}
+
+variable "ami_name_pattern" {
+  type        = string
+}
+
+variable "ami_architecture" {
+  type        = string
+}
