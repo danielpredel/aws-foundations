@@ -34,7 +34,9 @@ module "ec2" {
   instance_profile_name = module.iam.instance_profile_name
 
   user_data = templatefile("${path.module}/user-data.sh", {
-    bucket_name      = local.s3.bucket_name
-    aws_endpoint_url = "http://172.17.0.2:4566"
+    bucket_name                       = local.s3.bucket_name
+    aws_endpoint_url                  = local.floci.aws_endpoint_url
+    aws_ec2_metadata_service_endpoint = local.floci.aws_ec2_metadata_service_endpoint
+    region                            = var.region
   })
 }

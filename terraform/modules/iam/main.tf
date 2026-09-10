@@ -36,14 +36,41 @@ data "aws_iam_policy_document" "ec2_app_s3_policy" {
   }
 }
 
+data "aws_iam_policy_document" "ec2_cloudwatch_logs_policy" {
+  statement {
+    sid = "EC2PostCloudWatchLogs"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "logs:DescribeLogStreams"
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
+}
+
 resource "aws_iam_policy" "ec2_app_s3" {
   name   = "${var.common.prefix_name}-ec2-s3-app-policy"
   policy = data.aws_iam_policy_document.ec2_app_s3_policy.json
 }
 
+resource "aws_iam_policy" "ec2_cloudwatch_logs" {
+  name   = "${var.common.prefix_name}-ec2-cloudwatch-logs-policy"
+  policy = data.aws_iam_policy_document.ec2_cloudwatch_logs_policy.json
+}
+
 resource "aws_iam_role_policy_attachment" "ec2_app_s3" {
   role       = aws_iam_role.ec2_app.name
   policy_arn = aws_iam_policy.ec2_app_s3.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_cloudwatch_logs" {
+  role       = aws_iam_role.ec2_app.name
+  policy_arn = aws_iam_policy.ec2_cloudwatch_logs.arn
 }
 
 resource "aws_iam_instance_profile" "ec2_app" {
