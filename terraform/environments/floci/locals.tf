@@ -22,4 +22,9 @@ locals {
     key_pair_name = "${var.project}-${var.environment}-ec2"
     instance_name = "${local.common.prefix_name}-ec2-app"
   }
+
+  floci = {
+    aws_endpoint_url                  = "http://${var.floci_ip}:4566"
+    aws_ec2_metadata_service_endpoint = "http://${var.floci_ip}:9169"
+  }
 }

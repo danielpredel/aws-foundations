@@ -32,3 +32,8 @@ variable "ami_architecture" {
   type    = string
   default = "x86_64"
 }
+
+variable "floci_ip" {
+  type    = string
+  default = "172.17.0.2"
+}
