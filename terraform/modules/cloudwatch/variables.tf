@@ -7,3 +7,9 @@ variable "common" {
     tags        = map(string)
   })
 }
+
+variable "cloudwatch" {
+  type = object({
+    log_group_name = string
+  })
+}
