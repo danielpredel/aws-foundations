@@ -5,11 +5,19 @@ module "network" {
   network = local.network
 }
 
+module "cloudwatch" {
+  source = "../../modules/cloudwatch"
+
+  common = local.common
+}
+
 module "iam" {
   source = "../../modules/iam"
 
   common = local.common
   s3     = local.s3
+
+  aws_cloudwatch_log_group_arn = module.cloudwatch.aws_cloudwatch_log_group_arn
 }
 
 module "s3" {
