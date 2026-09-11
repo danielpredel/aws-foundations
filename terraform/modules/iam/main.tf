@@ -41,14 +41,14 @@ data "aws_iam_policy_document" "ec2_cloudwatch_logs_policy" {
     sid = "EC2PostCloudWatchLogs"
 
     actions = [
-      "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
       "logs:DescribeLogStreams"
     ]
 
     resources = [
-      "*",
+      var.aws_cloudwatch_log_group_arn,
+      "${var.aws_cloudwatch_log_group_arn}:*"
     ]
   }
 }

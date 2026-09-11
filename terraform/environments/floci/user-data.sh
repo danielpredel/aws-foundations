@@ -72,7 +72,7 @@ cat > /opt/aws/amazon-cloudwatch-agent/etc/cloudwatch-agent.json <<EOF
                         "units": [
                         "aws-foundations.service"
                         ],
-                        "log_group_name": "/aws/ec2/aws-foundations",
+                        "log_group_name": "${log_group_name}",
                         "log_stream_name": "{instance_id}"
                     }
                 ]

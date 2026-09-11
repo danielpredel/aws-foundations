@@ -14,6 +14,10 @@ locals {
     my_ip_cidr = "192.168.1.21/32"
   }
 
+  cloudwatch = {
+    log_group_name = "/aws/ec2/${local.common.project}"
+  }
+
   s3 = {
     bucket_name = "${local.common.prefix_name}-s3-app"
   }

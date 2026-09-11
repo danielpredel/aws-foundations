@@ -5,11 +5,20 @@ module "network" {
   network = local.network
 }
 
+module "cloudwatch" {
+  source = "../../modules/cloudwatch"
+
+  common     = local.common
+  cloudwatch = local.cloudwatch
+}
+
 module "iam" {
   source = "../../modules/iam"
 
   common = local.common
   s3     = local.s3
+
+  aws_cloudwatch_log_group_arn = module.cloudwatch.aws_cloudwatch_log_group_arn
 }
 
 module "s3" {
@@ -34,6 +43,7 @@ module "ec2" {
   instance_profile_name = module.iam.instance_profile_name
 
   user_data = templatefile("${path.module}/user-data.sh", {
+    log_group_name                    = local.cloudwatch.log_group_name
     bucket_name                       = local.s3.bucket_name
     aws_endpoint_url                  = local.floci.aws_endpoint_url
     aws_ec2_metadata_service_endpoint = local.floci.aws_ec2_metadata_service_endpoint

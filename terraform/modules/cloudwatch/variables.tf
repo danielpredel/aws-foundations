@@ -8,12 +8,8 @@ variable "common" {
   })
 }
 
-variable "s3" {
+variable "cloudwatch" {
   type = object({
-    bucket_name = string
+    log_group_name = string
   })
-}
-
-variable "aws_cloudwatch_log_group_arn" {
-  type = string
 }
