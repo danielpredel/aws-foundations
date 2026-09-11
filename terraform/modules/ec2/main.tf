@@ -30,4 +30,9 @@ resource "aws_instance" "app" {
       Name = var.ec2.instance_name
     }
   )
+
+  root_block_device {
+    volume_size = 8
+    volume_type = "gp3"
+  }
 }
