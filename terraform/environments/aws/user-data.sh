@@ -51,3 +51,37 @@ EOF
 # Enable and start service
 systemctl daemon-reload
 systemctl enable --now aws-foundations.service
+
+# Install CloudWatch Agent
+cd /tmp
+curl -O https://amazoncloudwatch-agent.s3.amazonaws.com/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
+sudo rpm -U ./amazon-cloudwatch-agent.rpm
+
+# Create CloudWatch Configuration File
+cat > /opt/aws/amazon-cloudwatch-agent/etc/cloudwatch-agent.json <<EOF
+{
+    "agent": {
+        "region": "${region}"
+    },
+    "logs": {
+        "logs_collected": {
+            "journald": {
+                "collect_list": [
+                    {
+                        "units": [
+                        "aws-foundations.service"
+                        ],
+                        "log_group_name": "${log_group_name}",
+                        "log_stream_name": "{instance_id}"
+                    }
+                ]
+            }
+        }
+    }
+}
+EOF
+
+# Start the agent
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+  -a fetch-config -m ec2 -s \
+  -c file:/opt/aws/amazon-cloudwatch-agent/etc/cloudwatch-agent.json
