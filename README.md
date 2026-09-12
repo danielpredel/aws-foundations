@@ -108,9 +108,18 @@ Floci provides a local AWS-compatible environment that allows AWS APIs, SDKs, an
 
 The infrastructure was also deployed (with terraform) and validated in real AWS.
 
+`EC2 Instance`
+
 ![EC2 Instance](images/aws/ec2-instance.png)
 
+`S3 Bucket`
+
 ![S3 Bucket](images/aws/s3-bucket.png)
+
+`CloudWatch Logs`
+
+![CloudWatch Logs](images/aws/cloudwatch-logs.png)
+
 
 ## Infrastructure Provisioning
 
@@ -182,7 +191,19 @@ The application provides endpoints for:
 | GET    | `/files/{key}` | Retrieve a file from S3  |
 | PUT    | `/files/{key}` | Upload a file to S3      |
 
-![Endpoints](images/application/endpoints.png)
+### Test Endpoints
+
+`Health Endpoint`
+
+![Health Endpoint](images/application/health.png)
+
+`PUT File Endpoint`
+
+![PUT File Endpoint](images/application/put-file.png)
+
+`GET File Endpoint`
+
+![GET File Endpoint](images/application/get-file.png)
 
 ### CloudWatch Logs
 
