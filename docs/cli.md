@@ -6,6 +6,14 @@ the infrastructure for this project.
 The commands use placeholders such as `<VPC-ID>` and `<Bucket-Name>` that must be
 replaced with the values generated during the setup.
 
+## CloudWatch
+
+Create Log Group
+
+```bash
+aws logs create-log-group --log-group-name <CloudWatchLogGroupName>
+```
+
 ## IAM
 
 The EC2 instance requires an IAM role that allows it to access the project's S3
@@ -59,6 +67,31 @@ Create a JSON file containing the permissions required by the application:
             ],
             "Resource": [
                 "arn:aws:s3:::<BucketName>/*"
+            ]
+        }
+    ]
+}
+```
+
+### Create the custom CloudWatch policy
+
+Create a JSON file containing the permissions required by the application:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "<CustomPolicySID>",
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "logs:DescribeLogStreams"
+            ],
+            "Resource": [
+                "<CloudWatchLogGroupARN>",
+                "<CloudWatchLogGroupARN>:*"
             ]
         }
     ]
