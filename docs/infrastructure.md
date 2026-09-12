@@ -14,44 +14,44 @@ Both environments use the same reusable Terraform modules while providing enviro
 ## Directory Structure
 
 ```text
-terraform/
-├── environments/
-│   ├── aws/
-│   │   ├── locals.tf
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   ├── providers.tf
-│   │   ├── user-data.sh
-│   │   └── variables.tf
-│   │
-│   └── floci/
-│       ├── locals.tf
-│       ├── main.tf
-│       ├── outputs.tf
-│       ├── providers.tf
-│       ├── user-data.sh
-│       └── variables.tf
-│
-└── modules/
-    ├── ec2/
-    │   ├── main.tf
-    │   ├── outputs.tf
-    │   └── variables.tf
-    │
-    ├── iam/
-    │   ├── main.tf
-    │   ├── outputs.tf
-    │   └── variables.tf
-    │
-    ├── network/
-    │   ├── main.tf
-    │   ├── outputs.tf
-    │   └── variables.tf
-    │
-    └── s3/
+terraform
+├── environments
+│   ├── aws
+│   │   ├── locals.tf
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   ├── providers.tf
+│   │   ├── user-data.sh
+│   │   └── variables.tf
+│   └── floci
+│       ├── locals.tf
+│       ├── main.tf
+│       ├── outputs.tf
+│       ├── providers.tf
+│       ├── user-data.sh
+│       └── variables.tf
+└── modules
+    ├── cloudwatch
+    │   ├── main.tf
+    │   ├── outputs.tf
+    │   └── variables.tf
+    ├── ec2
+    │   ├── main.tf
+    │   ├── outputs.tf
+    │   └── variables.tf
+    ├── iam
+    │   ├── main.tf
+    │   ├── outputs.tf
+    │   └── variables.tf
+    ├── network
+    │   ├── main.tf
+    │   ├── outputs.tf
+    │   └── variables.tf
+    └── s3
         ├── main.tf
         ├── outputs.tf
         └── variables.tf
+
 ```
 
 ## Environments
@@ -79,6 +79,9 @@ S3
 
 EC2
 └── FastAPI Application
+
+CloudWatch
+└── Application Log Group
 ```
 
 ### AWS
@@ -125,6 +128,14 @@ The `ec2` module provisions the EC2 instance that hosts the FastAPI application.
 
 The module receives networking and IAM information from the environment configuration and uses the provided user-data script to initialize the instance.
 
+### CloudWatch
+
+The `CloudWatch` module creates a Log Group configured to provide centralized logging for the FastAPI application running on EC2.
+
+Terraform provisions the CloudWatch Log Group and the IAM permissions required by the EC2 instance to create log streams and publish log events.
+
+The CloudWatch Agent runs on the EC2 instance and collects application logs from `systemd`/`journald`.
+
 ## Module Composition
 
 The environment configurations compose the individual modules into the complete infrastructure.
@@ -144,6 +155,9 @@ Conceptually:
                          │
                          ▼
                   FastAPI Application
+                         │
+                         ▼
+                   CloudWatch Logs
 ```
 
 This keeps reusable infrastructure definitions inside `modules/` while environment-specific configuration remains inside `environments/`.
@@ -215,17 +229,18 @@ Keeping the environments separate prevents local Floci resources and real AWS re
 
 The resulting infrastructure consists of:
 
-| Resource         | Terraform Module | Purpose                          |
-| ---------------- | ---------------- | -------------------------------- |
-| VPC              | `network`        | Networking foundation            |
-| Subnet           | `network`        | Hosts the EC2 instance           |
-| Internet Gateway | `network`        | Internet connectivity            |
-| Route Table      | `network`        | Network routing                  |
-| Security Group   | `network`        | Controls EC2 network access      |
-| IAM Role         | `iam`            | Grants EC2 AWS permissions       |
-| Instance Profile | `iam`            | Associates the IAM role with EC2 |
-| S3 Bucket        | `s3`             | Application file storage         |
-| EC2 Instance     | `ec2`            | Runs the FastAPI application     |
+| Resource             | Terraform Module | Purpose                          |
+| -------------------- | ---------------- | -------------------------------- |
+| Subnet               | `network`        | Hosts the EC2 instance           |
+| VPC                  | `network`        | Networking foundation            |
+| Internet Gateway     | `network`        | Internet connectivity            |
+| Route Table          | `network`        | Network routing                  |
+| Security Group       | `network`        | Controls EC2 network access      |
+| IAM Role             | `iam`            | Grants EC2 AWS permissions       |
+| Instance Profile     | `iam`            | Associates the IAM role with EC2 |
+| S3 Bucket            | `s3`             | Application file storage         |
+| EC2 Instance         | `ec2`            | Runs the FastAPI application     |
+| CloudWatch Log Group | `cloudwatch`     | Stores application logs          |
 
 ## Infrastructure as Code
 
