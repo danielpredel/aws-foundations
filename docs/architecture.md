@@ -4,8 +4,7 @@
 
 The project consists of a small backend application deployed on Amazon EC2 integrated with Amazon S3 for file storage and CloudWatch Logs for observability.
 
-The infrastructure is designed to be developed and validated locally using
-Floci before being deployed to real AWS.
+The infrastructure is designed to be developed and validated locally using Floci before being deployed to real AWS.
 
 ## Architecture
 

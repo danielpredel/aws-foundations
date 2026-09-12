@@ -260,7 +260,7 @@ A deployment is considered successful when:
 
 ## Teardown
 
-> **Note:** Before running `terraform destroy`, empty the S3 bucket. Terraform cannot delete a non-empty bucket unless `force_destroy` is enabled.
+> Before running `terraform destroy`, empty the S3 bucket. Terraform cannot delete a non-empty bucket unless `force_destroy` is enabled.
 
 ### Floci
 
