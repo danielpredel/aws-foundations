@@ -95,6 +95,7 @@ Terraform provisions the required infrastructure, including:
 * IAM role and instance profile
 * S3 bucket
 * EC2 instance
+* CloudWatch Log Group
 
 ### 6. Verify the EC2 Instance
 
@@ -142,6 +143,16 @@ PUT /files/{key}
 ```
 
 A successful upload followed by a retrieval confirms that the application can communicate with S3 using the EC2 IAM role.
+
+### 10. Verify CloudWatch Logs
+
+Verify that the application logs are being delivered to CloudWatch Logs:
+
+```bash
+aws logs tail <CloudWatchLogGroupName> --follow
+```
+
+The command displays new log events as they are published.
 
 ---
 
@@ -218,6 +229,18 @@ GET /files/{key}
 PUT /files/{key}
 ```
 
+### 9. Verify CloudWatch Logs
+
+Verify that the application logs are being delivered to CloudWatch Logs:
+
+```bash
+aws logs tail <CloudWatchLogGroupName> --follow --profile <profile-name>
+```
+
+The command displays new log events as they are published.
+
+> The `--profile` option is used because the AWS credentials are configured under a named AWS CLI profile rather than the default profile.
+
 ---
 
 ## Deployment Validation
@@ -231,10 +254,13 @@ A deployment is considered successful when:
 * The application can upload files to S3.
 * The application can retrieve files from S3.
 * The EC2 instance accesses S3 through its IAM role rather than hard-coded credentials.
+* CloudWatch Logs receives the application logs successfully.
 
 ---
 
 ## Teardown
+
+> **Note:** Before running `terraform destroy`, empty the S3 bucket. Terraform cannot delete a non-empty bucket unless `force_destroy` is enabled.
 
 ### Floci
 
