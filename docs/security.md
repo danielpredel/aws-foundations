@@ -4,10 +4,13 @@
 
 The EC2 instance uses an IAM role through an instance profile instead of storing AWS credentials on the instance.
 
-The role is granted only the S3 permissions required by the application:
+The role is granted only the permissions required by the application:
 
-- `s3:GetObject`
-- `s3:PutObject`
+* `s3:GetObject`
+* `s3:PutObject`
+* `logs:CreateLogStream`
+* `logs:PutLogEvents`
+* `logs:DescribeLogStreams`
 
 ## Network Security
 
@@ -22,6 +25,10 @@ Application traffic is allowed only through the required port.
 
 The application accesses S3 through the EC2 IAM role. No AWS access keys are
 embedded in the application code or deployment scripts.
+
+## CloudWatch Logs
+
+The CloudWatch Agent uses the EC2 instance role for authentication. No AWS credentials are stored in the CloudWatch Agent configuration.
 
 ## Credentials
 
